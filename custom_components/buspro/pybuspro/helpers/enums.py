@@ -67,6 +67,8 @@ class OperateCode(Enum):
     ReadStatusOfChannelsResponse = b'\x00\x34'
     SceneControl = b'\x00\x02'
     SceneControlResponse = b'\x00\x03'
+    SequenceControl = b'\x00\x1A'
+    SequenceControlResponse = b'\x00\x1B'
     UniversalSwitchControl = b'\xE0\x1C'
     UniversalSwitchControlResponse = b'\xE0\x1D'
 

@@ -29,16 +29,19 @@ DEPENDENCIES = []
 DEFAULT_CONF_NAME = ""
 
 DEFAULT_SCENE_NAME = "BUSPRO SCENE"
+DEFAULT_SEQUENCE_NAME = "BUSPRO SEQUENCE"
 DEFAULT_SEND_MESSAGE_NAME = "BUSPRO MESSAGE"
 
 SERVICE_BUSPRO_SEND_MESSAGE = "send_message"
 SERVICE_BUSPRO_ACTIVATE_SCENE = "activate_scene"
+SERVICE_BUSPRO_ACTIVATE_SEQUENCE = "activate_sequence"
 SERVICE_BUSPRO_UNIVERSAL_SWITCH = "set_universal_switch"
 
 SERVICE_BUSPRO_ATTR_OPERATE_CODE = "operate_code"
 SERVICE_BUSPRO_ATTR_ADDRESS = "address"
 SERVICE_BUSPRO_ATTR_PAYLOAD = "payload"
 SERVICE_BUSPRO_ATTR_SCENE_ADDRESS = "scene_address"
+SERVICE_BUSPRO_ATTR_SEQUENCE_ADDRESS = "sequence_address"
 SERVICE_BUSPRO_ATTR_SWITCH_NUMBER = "switch_number"
 SERVICE_BUSPRO_ATTR_STATUS = "status"
 
@@ -46,6 +49,12 @@ SERVICE_BUSPRO_ATTR_STATUS = "status"
 SERVICE_BUSPRO_ACTIVATE_SCENE_SCHEMA = vol.Schema({
     vol.Required(SERVICE_BUSPRO_ATTR_ADDRESS): vol.Any([cv.positive_int]),
     vol.Required(SERVICE_BUSPRO_ATTR_SCENE_ADDRESS): vol.Any([cv.positive_int]),
+})
+
+"""{ "address": [1,74], "sequence_address": [3,5] }"""
+SERVICE_BUSPRO_ACTIVATE_SEQUENCE_SCHEMA = vol.Schema({
+    vol.Required(SERVICE_BUSPRO_ATTR_ADDRESS): vol.Any([cv.positive_int]),
+    vol.Required(SERVICE_BUSPRO_ATTR_SEQUENCE_ADDRESS): vol.Any([cv.positive_int]),
 })
 
 """{ "address": [1,74], "operate_code": [4,12], "payload": [1,75,0,3] }"""
@@ -138,6 +147,16 @@ class BusproModule:
         scene = Scene(self.hdl, attr_address, attr_scene_address, DEFAULT_SCENE_NAME)
         await scene.run()
 
+    async def service_activate_sequence(self, call):
+        """Service for activatign a __sequence"""
+        # noinspection PyUnresolvedReferences
+        from .pybuspro.devices.sequence import Sequence
+
+        attr_address = call.data.get(SERVICE_BUSPRO_ATTR_ADDRESS)
+        attr_sequence_address = call.data.get(SERVICE_BUSPRO_ATTR_SEQUENCE_ADDRESS)
+        sequence = Sequence(self.hdl, attr_address, attr_sequence_address, DEFAULT_SEQUENCE_NAME)
+        await sequence.run()
+
     async def service_send_message(self, call):
         """Service for send an arbitrary message"""
         # noinspection PyUnresolvedReferences
@@ -170,6 +189,12 @@ class BusproModule:
             DOMAIN, SERVICE_BUSPRO_ACTIVATE_SCENE,
             self.service_activate_scene,
             schema=SERVICE_BUSPRO_ACTIVATE_SCENE_SCHEMA)
+        
+        """ activate_sequence """
+        self.hass.services.async_register(
+            DOMAIN, SERVICE_BUSPRO_ACTIVATE_SEQUENCE,
+            self.service_activate_sequence,
+            schema=SERVICE_BUSPRO_ACTIVATE_SEQUENCE_SCHEMA)
 
         """ send_message """
         self.hass.services.async_register(
