@@ -5,11 +5,12 @@ from ..helpers.generics import Generics
 
 
 class Light(Device):
-    def __init__(self, buspro, device_address, channel_number, name="", delay_read_current_state_seconds=0):
+    def __init__(self, buspro, device_type, device_address, channel_number, name="", delay_read_current_state_seconds=0):
         super().__init__(buspro, device_address, name)
         # device_address = (subnet_id, device_id, channel_number)
 
         self._buspro = buspro
+        self._device_type = device_type
         self._device_address = device_address
         self._channel = channel_number
         self._brightness = 0
