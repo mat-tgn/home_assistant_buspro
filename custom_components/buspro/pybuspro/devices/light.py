@@ -48,21 +48,35 @@ class Light(Device):
         intensity = 0
         await self._set(intensity, running_time_seconds)
 
-    async def set_brightness(self, intensity, running_time_seconds=0):
+    async def async_turn_on(self, intensity, running_time_seconds=0):
         await self._set(intensity, running_time_seconds)
 
-    async def async_turn_on(self,color,intensity,running_time_seconds=0):
-        self._brightness = intensity
-        self._color = color
-        self._set_previous_brightness(self._brightness)
+    async def async_turn_on_rgb(self,color,running_time_seconds=0):
 
+        self._color = color
+        (r,g,b) = color
+        self.channel_control(self._channel , r, running_time_seconds)
+        self.channel_control(self._channel+1 , g, running_time_seconds )
+        self.channel_control(self._channel+2 , b, running_time_seconds )
+
+    async def async_turn_on_rgbw(self,color,running_time_seconds=0):
+
+        self._color = color
+        (r,g,b,w) = color
+        self.channel_control(self._channel , r, running_time_seconds )
+        self.channel_control(self._channel+1 , g, running_time_seconds )
+        self.channel_control(self._channel+2 , b, running_time_seconds )
+        self.channel_control(self._channel+3 , w, running_time_seconds )
+        
+
+    async def channel_control(self, channel, value, running_time_seconds=0):
         generics = Generics()
         (minutes, seconds) = generics.calculate_minutes_seconds(running_time_seconds)
-
+        
         scc = _SingleChannelControl(self._buspro)
         scc.subnet_id, scc.device_id = self._device_address
-        scc.channel_number = self._channel
-        scc.channel_level = intensity
+        scc.channel_number = channel
+        scc.channel_level = value
         scc.running_time_minutes = minutes
         scc.running_time_seconds = seconds
         await scc.send()
