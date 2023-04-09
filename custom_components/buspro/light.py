@@ -107,7 +107,7 @@ class BusproLight(LightEntity):
     @property
     def brightness(self):
         """Return the brightness of the light."""
-        brightness = self._device.current_brightness / 100 * 255
+        brightness = self._device.current_brightness
         return brightness
 
     @property

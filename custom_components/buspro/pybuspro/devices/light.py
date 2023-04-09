@@ -55,18 +55,19 @@ class Light(Device):
 
         self._color = color
         (r,g,b) = color
-        self.channel_control(self._channel , r, running_time_seconds)
-        self.channel_control(self._channel+1 , g, running_time_seconds )
-        self.channel_control(self._channel+2 , b, running_time_seconds )
+        
+        await self.channel_control(self._channel , r, running_time_seconds)
+        await self.channel_control(self._channel+1 , g, running_time_seconds )
+        await self.channel_control(self._channel+2 , b, running_time_seconds )
 
     async def async_turn_on_rgbw(self,color,running_time_seconds=0):
 
         self._color = color
         (r,g,b,w) = color
-        self.channel_control(self._channel , r, running_time_seconds )
-        self.channel_control(self._channel+1 , g, running_time_seconds )
-        self.channel_control(self._channel+2 , b, running_time_seconds )
-        self.channel_control(self._channel+3 , w, running_time_seconds )
+        await self.channel_control(self._channel , r, running_time_seconds )
+        await self.channel_control(self._channel+1 , g, running_time_seconds )
+        await self.channel_control(self._channel+2 , b, running_time_seconds )
+        await self.channel_control(self._channel+3 , w, running_time_seconds )
         
 
     async def channel_control(self, channel, value, running_time_seconds=0):
@@ -98,7 +99,7 @@ class Light(Device):
 
     @property
     def current_brightness(self):
-        return self._brightness
+        return self._brightness / 100 * 255
     
     @property
     def current_color(self):
