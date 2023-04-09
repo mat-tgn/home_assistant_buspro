@@ -14,6 +14,7 @@ class Light(Device):
         self._device_address = device_address
         self._channel = channel_number
         self._brightness = 0
+        self._color = tuple[int, int, int]
         self._previous_brightness = None
         self.register_telegram_received_cb(self._telegram_received_cb)
         self._call_read_current_status_of_channels(run_from_init=True)
@@ -50,6 +51,22 @@ class Light(Device):
     async def set_brightness(self, intensity, running_time_seconds=0):
         await self._set(intensity, running_time_seconds)
 
+    async def async_turn_on(self,color,intensity,running_time_seconds=0):
+        self._brightness = intensity
+        self._color = color
+        self._set_previous_brightness(self._brightness)
+
+        generics = Generics()
+        (minutes, seconds) = generics.calculate_minutes_seconds(running_time_seconds)
+
+        scc = _SingleChannelControl(self._buspro)
+        scc.subnet_id, scc.device_id = self._device_address
+        scc.channel_number = self._channel
+        scc.channel_level = intensity
+        scc.running_time_minutes = minutes
+        scc.running_time_seconds = seconds
+        await scc.send()
+
     async def read_status(self):
         raise NotImplementedError
 
@@ -68,6 +85,10 @@ class Light(Device):
     @property
     def current_brightness(self):
         return self._brightness
+    
+    @property
+    def current_color(self):
+        return self._color
 
     @property
     def is_on(self):

@@ -9,7 +9,7 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.light import LightEntity, ColorMode, PLATFORM_SCHEMA, ATTR_BRIGHTNESS
+from homeassistant.components.light import LightEntity, ColorMode, PLATFORM_SCHEMA, ATTR_BRIGHTNESS, ATTR_RGB_COLOR
 from homeassistant.const import (CONF_NAME, CONF_DEVICES)
 from homeassistant.core import callback
 
@@ -110,6 +110,12 @@ class BusproLight(LightEntity):
         brightness = self._device.current_brightness / 100 * 255
         return brightness
 
+    @property
+    def rgb_color(self) -> tuple[int, int, int]:
+        """Return RGB color of the light."""
+        color = self._device.current_color 
+        return color
+    
     def setup_color_modes(self):
         self._attr_supported_color_modes = set()
         if self._type == "white" or self._type == "monochrome":
@@ -129,16 +135,24 @@ class BusproLight(LightEntity):
     def is_on(self):
         """Return true if light is on."""
         return self._device.is_on
-
+    
     async def async_turn_on(self, **kwargs):
         """Instruct the light to turn on."""
-        brightness = int(kwargs.get(ATTR_BRIGHTNESS, 255) / 255 * 100)
+        _LOGGER.debug(f"Command `turn_on` with args: `{kwargs}`")
+
+        color: tuple[int, int, int] | None = None
+        brightness: int | None = None
+
+        if ATTR_BRIGHTNESS in kwargs:
+            brightness = int(kwargs.get(ATTR_BRIGHTNESS, 255) / 255 * 100)
+
+        elif ATTR_RGB_COLOR in kwargs:
+            color = kwargs.get(ATTR_RGB_COLOR)
 
         if not self.is_on and self._device.previous_brightness is not None and brightness == 100:
             brightness = self._device.previous_brightness
 
-        _LOGGER.debug("Setting light brightness {} runningTime {}".format(brightness,self._running_time))
-        await self._device.set_brightness(brightness, self._running_time)
+        await self._device.async_turn_on(color,brightness, self._running_time)
 
     async def async_turn_off(self, **kwargs):
         """Instruct the light to turn off."""
