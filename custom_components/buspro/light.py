@@ -24,6 +24,7 @@ DEFAULT_TYPE = "monochrome"
 DEVICE_SCHEMA = vol.Schema({
     vol.Optional("running_time", default=DEFAULT_DEVICE_RUNNING_TIME): cv.positive_int,
     vol.Optional("type", default=DEFAULT_TYPE): cv.string,
+    vol.Required("channel"): cv.positive_int,
     vol.Required(CONF_NAME): cv.string,
 })
 
@@ -48,7 +49,7 @@ async def async_setup_platform(hass, config, async_add_entites, discovery_info=N
         name = device_config[CONF_NAME]
         device_running_time = int(device_config["running_time"])
         device_type = device_config['type']
-        # channels =  bool(device_config["channels"])
+        channel_number = int(device_config['channel'])
 
         if device_running_time == 0:
             device_running_time = platform_running_time
@@ -57,7 +58,7 @@ async def async_setup_platform(hass, config, async_add_entites, discovery_info=N
 
         address2 = address.split('.')
         device_address = (int(address2[0]), int(address2[1]))
-        channel_number = int(address2[2])
+        # channel_number = int(address2[2])
 
         _LOGGER.debug("Adding '{}' light '{}' with address {} and channel number {}".format(device_type, name, device_address, channel_number))
         light = Light(hdl, device_type, device_address, channel_number, name)

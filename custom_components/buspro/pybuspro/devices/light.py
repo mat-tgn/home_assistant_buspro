@@ -14,7 +14,10 @@ class Light(Device):
         self._device_address = device_address
         self._channel = channel_number
         self._brightness = 0
-        self._color = tuple[int, int, int]
+        self._r = 0
+        self._g = 0
+        self._b = 0
+        self._w = 0
         self._previous_brightness = None
         self.register_telegram_received_cb(self._telegram_received_cb)
         self._call_read_current_status_of_channels(run_from_init=True)
@@ -55,17 +58,20 @@ class Light(Device):
         await self.channel_control(self._channel , intensity, running_time_seconds)
 
     async def async_turn_on_rgb(self,color,running_time_seconds=0):
-
-        self._color = color
         (r,g,b) = color
+        self._r = r
+        self._g = g
+        self._b = b
         await self.channel_control(self._channel , r, running_time_seconds)
         await self.channel_control(self._channel+1 , g, running_time_seconds )
         await self.channel_control(self._channel+2 , b, running_time_seconds )
 
     async def async_turn_on_rgbw(self,color,running_time_seconds=0):
-
-        self._color = color
         (r,g,b,w) = color
+        self._r = r
+        self._g = g
+        self._b = b
+        self._w = w
         await self.channel_control(self._channel , r, running_time_seconds )
         await self.channel_control(self._channel+1 , g, running_time_seconds )
         await self.channel_control(self._channel+2 , b, running_time_seconds )
@@ -92,7 +98,10 @@ class Light(Device):
     
     @property
     def current_color(self):
-        return self._color
+        if self._device_type == 'rgb':
+            return (self._r, self._g, self._b)
+        elif self._device_type == 'rgbw':
+            return (self._r, self._g, self._b, self._w)
 
     @property
     def is_on(self):
