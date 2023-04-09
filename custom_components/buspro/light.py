@@ -48,7 +48,7 @@ async def async_setup_platform(hass, config, async_add_entites, discovery_info=N
         name = device_config[CONF_NAME]
         device_running_time = int(device_config["running_time"])
         device_type = device_config['type']
-        channels =  bool(device_config["channels"])
+        # channels =  bool(device_config["channels"])
 
         if device_running_time == 0:
             device_running_time = platform_running_time
