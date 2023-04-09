@@ -9,7 +9,7 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.light import LightEntity, ColorMode, PLATFORM_SCHEMA, ATTR_BRIGHTNESS_PCT
+from homeassistant.components.light import LightEntity, ColorMode, PLATFORM_SCHEMA, ATTR_BRIGHTNESS
 from homeassistant.const import (CONF_NAME, CONF_DEVICES)
 from homeassistant.core import callback
 
@@ -132,11 +132,12 @@ class BusproLight(LightEntity):
 
     async def async_turn_on(self, **kwargs):
         """Instruct the light to turn on."""
-        brightness = int(kwargs.get(ATTR_BRIGHTNESS_PCT, 100))
+        brightness = int(kwargs.get(ATTR_BRIGHTNESS, 255) / 255 * 100)
 
         if not self.is_on and self._device.previous_brightness is not None and brightness == 100:
             brightness = self._device.previous_brightness
 
+        _LOGGER.debug("Setting light brightness {} runningTime {}".format(brightness,self._running_time))
         await self._device.set_brightness(brightness, self._running_time)
 
     async def async_turn_off(self, **kwargs):
