@@ -109,7 +109,7 @@ class Light(Device):
         scc = _SingleChannelControl(self._buspro)
         scc.subnet_id, scc.device_id = self._device_address
         scc.channel_number = channel
-        scc.channel_level = (value/255)*100
+        scc.channel_level = int( (value/255)*100 )
         scc.running_time_minutes = minutes
         scc.running_time_seconds = seconds
         await scc.send()

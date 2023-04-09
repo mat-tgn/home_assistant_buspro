@@ -141,7 +141,7 @@ class BusproLight(LightEntity):
         _LOGGER.debug(f"Command `turn_on` with args: `{kwargs}`")
 
         if ATTR_BRIGHTNESS in kwargs:
-            brightness = int(kwargs.get(ATTR_BRIGHTNESS, 255) / 255 * 100)
+            brightness = kwargs.get(ATTR_BRIGHTNESS)
             await self._device.async_turn_on(brightness, self._running_time)
         elif ATTR_RGB_COLOR in kwargs:
             color = kwargs.get(ATTR_RGB_COLOR)
