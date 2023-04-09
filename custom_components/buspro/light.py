@@ -75,7 +75,7 @@ class BusproLight(LightEntity):
         self._device = device
         self._type = type
         self._running_time = running_time
-        self._setup_color_modes()
+        self.setup_color_modes()
         self.async_register_callbacks()
 
     @callback
@@ -110,7 +110,7 @@ class BusproLight(LightEntity):
         brightness = self._device.current_brightness / 100 * 255
         return brightness
 
-    def _setup_color_modes(self):
+    def setup_color_modes(self):
         self._attr_supported_color_modes = set()
         if self._type == "white" or self._type == "monochrome":
             self._attr_supported_color_modes.add(ColorMode.BRIGHTNESS)
