@@ -112,7 +112,6 @@ class BusproLight(LightEntity):
 
     @property
     def _setup_color_modes(self):
-
         self._attr_supported_color_modes = set()
         if self._type == "white" or self._type == "monochrome":
             self._attr_supported_color_modes.add(ColorMode.BRIGHTNESS)
