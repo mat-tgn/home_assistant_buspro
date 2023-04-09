@@ -9,7 +9,7 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.light import LightEntity, PLATFORM_SCHEMA, COLOR_MODE_DIMMER, COLOR_MODE_RGB, COLOR_MODE_RGBW, COLOR_MODE_ONOFF, ATTR_BRIGHTNESS
+from homeassistant.components.light import LightEntity, PLATFORM_SCHEMA, COLOR_MODE_BRIGHTNESS, COLOR_MODE_RGB, COLOR_MODE_RGBW, COLOR_MODE_ONOFF, ATTR_BRIGHTNESS
 from homeassistant.const import (CONF_NAME, CONF_DEVICES)
 from homeassistant.core import callback
 
@@ -114,7 +114,7 @@ class BusproLight(LightEntity):
         """Flag supported features."""
         flags = 0
         if self._type == "white" | self._type == "monochrome":
-            flags = COLOR_MODE_DIMMER
+            flags = COLOR_MODE_BRIGHTNESS
         elif self._type == "rgb":
             flags = COLOR_MODE_RGB
         elif self._type == "rgbw":
