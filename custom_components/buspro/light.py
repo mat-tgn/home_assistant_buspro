@@ -114,17 +114,17 @@ class BusproLight(LightEntity):
     def _setup_color_modes(self):
         self._attr_supported_color_modes = set()
         if self._type == "white" or self._type == "monochrome":
-            self._attr_supported_color_modes.append(LightEntity.ColorMode.BRIGHTNESS)
+            self._attr_supported_color_modes.add(LightEntity.ColorMode.BRIGHTNESS)
             # flags = LightEntity.ColorMode.BRIGHTNESS
         elif self._type == "rgb":
             # flags = LightEntity.ColorMode.RGB
-            self._attr_supported_color_modes.append(LightEntity.ColorMode.RGB)
+            self._attr_supported_color_modes.add(LightEntity.ColorMode.RGB)
         elif self._type == "rgbw":
             # flags = LightEntity.ColorMode.RGBW
-            self._attr_supported_color_modes.append(LightEntity.ColorMode.RGBW)
+            self._attr_supported_color_modes.add(LightEntity.ColorMode.RGBW)
         else:
             # flags = LightEntity.ColorMode.ONOFF
-            self._attr_supported_color_modes.append(LightEntity.ColorMode.ONOFF)
+            self._attr_supported_color_modes.add(LightEntity.ColorMode.ONOFF)
 
     @property
     def is_on(self):
