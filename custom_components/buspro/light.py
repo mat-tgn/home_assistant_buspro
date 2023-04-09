@@ -113,7 +113,7 @@ class BusproLight(LightEntity):
     def supported_color_modes(self):
         """Flag supported features."""
         flags = 0
-        if self._type == "white" | self._type == "monochrome":
+        if self._type == "white" or self._type == "monochrome":
             flags = COLOR_MODE_BRIGHTNESS
         elif self._type == "rgb":
             flags = COLOR_MODE_RGB
