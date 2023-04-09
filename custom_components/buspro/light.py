@@ -9,7 +9,7 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.light import LightEntity, PLATFORM_SCHEMA, ATTR_BRIGHTNESS_PCT
+from homeassistant.components.light import LightEntity, ColorMode, PLATFORM_SCHEMA, ATTR_BRIGHTNESS_PCT
 from homeassistant.const import (CONF_NAME, CONF_DEVICES)
 from homeassistant.core import callback
 
@@ -112,20 +112,20 @@ class BusproLight(LightEntity):
 
     @property
     def _setup_color_modes(self):
-        
+
         self._attr_supported_color_modes = set()
         if self._type == "white" or self._type == "monochrome":
-            self._attr_supported_color_modes.add(LightEntity.ColorMode.BRIGHTNESS)
+            self._attr_supported_color_modes.add(ColorMode.BRIGHTNESS)
             # flags = LightEntity.ColorMode.BRIGHTNESS
         elif self._type == "rgb":
             # flags = LightEntity.ColorMode.RGB
-            self._attr_supported_color_modes.add(LightEntity.ColorMode.RGB)
+            self._attr_supported_color_modes.add(ColorMode.RGB)
         elif self._type == "rgbw":
             # flags = LightEntity.ColorMode.RGBW
-            self._attr_supported_color_modes.add(LightEntity.ColorMode.RGBW)
+            self._attr_supported_color_modes.add(ColorMode.RGBW)
         else:
             # flags = LightEntity.ColorMode.ONOFF
-            self._attr_supported_color_modes.add(LightEntity.ColorMode.ONOFF)
+            self._attr_supported_color_modes.add(ColorMode.ONOFF)
 
     @property
     def is_on(self):
