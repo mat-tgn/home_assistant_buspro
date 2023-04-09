@@ -9,7 +9,7 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.light import LightEntity, PLATFORM_SCHEMA, COLOR_MODE_BRIGHTNESS, COLOR_MODE_RGB, COLOR_MODE_RGBW, COLOR_MODE_ONOFF, ATTR_BRIGHTNESS
+from homeassistant.components.light import LightEntity, PLATFORM_SCHEMA, ATTR_BRIGHTNESS_PCT
 from homeassistant.const import (CONF_NAME, CONF_DEVICES)
 from homeassistant.core import callback
 
@@ -75,6 +75,7 @@ class BusproLight(LightEntity):
         self._device = device
         self._type = type
         self._running_time = running_time
+        self._setup_color_modes()
         self.async_register_callbacks()
 
     @callback
@@ -110,18 +111,19 @@ class BusproLight(LightEntity):
         return brightness
 
     @property
-    def supported_color_modes(self):
-        """Flag supported features."""
-        flags = 0
+    def _setup_color_modes(self):
         if self._type == "white" or self._type == "monochrome":
-            flags = COLOR_MODE_BRIGHTNESS
+            self._attr_supported_color_modes.append(LightEntity.ColorMode.BRIGHTNESS)
+            # flags = LightEntity.ColorMode.BRIGHTNESS
         elif self._type == "rgb":
-            flags = COLOR_MODE_RGB
+            # flags = LightEntity.ColorMode.RGB
+            self._attr_supported_color_modes.append(LightEntity.ColorMode.RGB)
         elif self._type == "rgbw":
-            flags = COLOR_MODE_RGBW
+            # flags = LightEntity.ColorMode.RGBW
+            self._attr_supported_color_modes.append(LightEntity.ColorMode.RGBW)
         else:
-            flags = COLOR_MODE_ONOFF
-        return flags
+            # flags = LightEntity.ColorMode.ONOFF
+            self._attr_supported_color_modes.append(LightEntity.ColorMode.ONOFF)
 
     @property
     def is_on(self):
@@ -130,7 +132,7 @@ class BusproLight(LightEntity):
 
     async def async_turn_on(self, **kwargs):
         """Instruct the light to turn on."""
-        brightness = int(kwargs.get(ATTR_BRIGHTNESS, 255) / 255 * 100)
+        brightness = int(kwargs.get(ATTR_BRIGHTNESS_PCT, 100))
 
         if not self.is_on and self._device.previous_brightness is not None and brightness == 100:
             brightness = self._device.previous_brightness
