@@ -110,7 +110,6 @@ class BusproLight(LightEntity):
         brightness = self._device.current_brightness / 100 * 255
         return brightness
 
-    @property
     def _setup_color_modes(self):
         self._attr_supported_color_modes = set()
         if self._type == "white" or self._type == "monochrome":
