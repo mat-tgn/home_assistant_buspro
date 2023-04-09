@@ -29,12 +29,12 @@ class Light(Device):
             # success = telegram.payload[1]
             brightness = telegram.payload[2]
             if channel == self._channel:
-                self._brightness = brightness
+                self._brightness = (brightness/100)*255
                 self._set_previous_brightness(self._brightness)
                 self._call_device_updated()
         elif telegram.operate_code == OperateCode.ReadStatusOfChannelsResponse:
             if self._channel <= telegram.payload[0]:
-                self._brightness = telegram.payload[self._channel]
+                self._brightness = (telegram.payload[self._channel]/100)*255
                 self._set_previous_brightness(self._brightness)
                 self._call_device_updated()
         elif telegram.operate_code == OperateCode.SceneControlResponse:
@@ -42,13 +42,16 @@ class Light(Device):
 
     async def set_on(self, running_time_seconds=0):
         intensity = 255
+        self.current_brightness = intensity
         await self.channel_control(self._channel , intensity, running_time_seconds)
 
     async def set_off(self, running_time_seconds=0):
         intensity = 0
+        self.current_brightness = intensity
         await self.channel_control(self._channel , intensity, running_time_seconds)
 
     async def async_turn_on(self, intensity, running_time_seconds=0):
+        self.current_brightness = intensity
         await self.channel_control(self._channel , intensity, running_time_seconds)
 
     async def async_turn_on_rgb(self,color,running_time_seconds=0):
