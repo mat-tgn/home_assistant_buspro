@@ -143,6 +143,9 @@ class BusproLight(LightEntity):
 
         if ATTR_BRIGHTNESS in kwargs:
             brightness = kwargs.get(ATTR_BRIGHTNESS)
+            # Restore previous brightness from off to on
+            if not self.is_on and self._device.previous_brightness is not None and brightness == 255:
+                brightness = self._device.previous_brightness
             await self._device.async_turn_on(brightness, self._running_time)
         elif ATTR_RGB_COLOR in kwargs:
             color = kwargs.get(ATTR_RGB_COLOR)
@@ -151,10 +154,6 @@ class BusproLight(LightEntity):
             color = kwargs.get(ATTR_RGBW_COLOR)
             await self._device.async_turn_on_rgbw(color, self._running_time)
 
-        # if not self.is_on and self._device.previous_brightness is not None and brightness == 100:
-        #     brightness = self._device.previous_brightness
-
-        
 
     async def async_turn_off(self, **kwargs):
         """Instruct the light to turn off."""

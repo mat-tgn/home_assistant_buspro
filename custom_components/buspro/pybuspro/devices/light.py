@@ -55,6 +55,7 @@ class Light(Device):
 
     async def async_turn_on(self, intensity, running_time_seconds=0):
         self._brightness = intensity
+        self._set_previous_brightness(self._brightness)
         await self.channel_control(self._channel , intensity, running_time_seconds)
 
     async def async_turn_on_rgb(self,color,running_time_seconds=0):
