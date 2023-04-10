@@ -139,7 +139,7 @@ class BusproLight(LightEntity):
     
     async def async_turn_on(self, **kwargs):
         """Instruct the light to turn on."""
-        _LOGGER.critical(f"Command `turn_on` with args: `{kwargs}`")
+        _LOGGER.warning(f"Command `turn_on` with args: `{kwargs}`")
 
         if ATTR_BRIGHTNESS in kwargs:
             brightness = kwargs.get(ATTR_BRIGHTNESS)
