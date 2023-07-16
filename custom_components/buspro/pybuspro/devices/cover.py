@@ -59,5 +59,5 @@ class Cover(Device):
         scc = _CoverControl(self._buspro)
         scc.subnet_id, scc.device_id = self._device_address
         scc.channel_number = self._channel
-        scc.channel_status = status
+        scc.channel_status = self._status
         await scc.send()
