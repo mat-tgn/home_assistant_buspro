@@ -96,10 +96,7 @@ class BusproCover(CoverEntity):
 
     def setup_features(self):
         """Return the list of supported features."""
-        self._attr_supported_features = set()
-        self._attr_supported_features.add(CoverEntityFeature.OPEN)
-        self._attr_supported_features.add(CoverEntityFeature.CLOSE)
-        self._attr_supported_features.add(CoverEntityFeature.STOP)
+        self._attr_supported_features = ( CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.STOP )
 
 
     async def async_open_cover(self, **kwargs):
