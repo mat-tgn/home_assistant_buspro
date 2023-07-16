@@ -1,4 +1,5 @@
 {
     "name": "HDL Buspro",
-    "render_readme": true
+    "render_readme": true,
+    "version": "0.1a"
 }
