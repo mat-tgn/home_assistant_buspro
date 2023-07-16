@@ -43,11 +43,10 @@ class Cover(Device):
 
     @property
     def is_closed(self):
-        return None
-        # if self._status == CoverStatus.CLOSE:
-        #     return True
-        # else:
-        #     return False
+        if self._status == CoverStatus.CLOSE:
+            return True
+        else:
+            return False
 
     @property
     def device_identifier(self):
