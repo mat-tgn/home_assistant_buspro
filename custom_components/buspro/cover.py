@@ -59,7 +59,7 @@ class BusproCover(CoverEntity):
         self._hass = hass
         self._device = device
         self._attr_device_class = CoverDeviceClass.CURTAIN
-        self.setup_features()
+        # self.setup_features()
         self.async_register_callbacks()
 
     @callback
@@ -94,12 +94,21 @@ class BusproCover(CoverEntity):
         return self._device.is_closed
 
 
-    def setup_features(self):
-        """Return the list of supported features."""
-        self._attr_supported_features = (   CoverEntityFeature.OPEN |
-                                            CoverEntityFeature.CLOSE |
-                                            CoverEntityFeature.STOP)
+    # def setup_features(self):
+    #     """Return the list of supported features."""
+    #     self._attr_supported_features = (   CoverEntityFeature.OPEN |
+    #                                         CoverEntityFeature.CLOSE |
+    #                                         CoverEntityFeature.STOP)
 
+    @property
+    def supported_features(self) -> CoverEntityFeature:
+        """Flag supported features."""
+        features = (
+            CoverEntityFeature.OPEN
+            | CoverEntityFeature.CLOSE
+            | CoverEntityFeature.STOP
+        )
+        return features
 
     async def async_open_cover(self, **kwargs):
         """Instruct the cover to open."""
