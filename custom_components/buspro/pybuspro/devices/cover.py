@@ -12,7 +12,7 @@ class Cover(Device):
         self._buspro = buspro
         self._device_address = device_address
         self._channel = channel_number
-        self._status = 0
+        self._status = CoverStatus.CLOSE
         self.register_telegram_received_cb(self._telegram_received_cb)
         self._call_read_current_status_of_channels(run_from_init=True)
 
@@ -43,10 +43,11 @@ class Cover(Device):
 
     @property
     def is_closed(self):
-        if self._status == CoverStatus.CLOSE:
-            return True
-        else:
-            return False
+        return None
+        # if self._status == CoverStatus.CLOSE:
+        #     return True
+        # else:
+        #     return False
 
     @property
     def device_identifier(self):
