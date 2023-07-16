@@ -9,7 +9,7 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.cover import CoverEntity, CoverEntityFeature, PLATFORM_SCHEMA
+from homeassistant.components.cover import CoverEntity, CoverEntityFeature, CoverDeviceClass, PLATFORM_SCHEMA
 from homeassistant.const import (CONF_NAME, CONF_DEVICES)
 from homeassistant.core import callback
 
@@ -58,6 +58,7 @@ class BusproCover(CoverEntity):
     def __init__(self, hass, device):
         self._hass = hass
         self._device = device
+        self._attr_device_class = CoverDeviceClass.CURTAIN
         self.setup_features()
         self.async_register_callbacks()
 
