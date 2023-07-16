@@ -44,19 +44,17 @@ class Light(Device):
             self._call_read_current_status_of_channels()
 
     async def set_on(self, running_time_seconds=0):
-        intensity = 255
-        self._brightness = intensity
-        await self.channel_control(self._channel , intensity, running_time_seconds)
+        self._brightness = 255
+        await self.channel_control(self._channel , self._brightness , running_time_seconds)
 
     async def set_off(self, running_time_seconds=0):
-        intensity = 0
-        self._brightness = intensity
-        await self.channel_control(self._channel , intensity, running_time_seconds)
+        self._brightness = 0
+        await self.channel_control(self._channel , self._brightness , running_time_seconds)
 
     async def async_turn_on(self, intensity, running_time_seconds=0):
-        self._brightness = intensity
         self._set_previous_brightness(self._brightness)
-        await self.channel_control(self._channel , intensity, running_time_seconds)
+        self._brightness = intensity        
+        await self.channel_control(self._channel , self._brightness, running_time_seconds)
 
     async def async_turn_on_rgb(self,color,running_time_seconds=0):
         (r,g,b) = color
@@ -112,8 +110,8 @@ class Light(Device):
             return True
 
     def _set_previous_brightness(self, brightness):
-        if self.supports_brightness and brightness > 0:
-            self._previous_brightness = brightness
+        #if self.supports_brightness and brightness > 0:
+        self._previous_brightness = brightness
 
     async def channel_control(self, channel, value, running_time_seconds=0):
         generics = Generics()
