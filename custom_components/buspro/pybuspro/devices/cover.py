@@ -1,4 +1,4 @@
-from .control import _CurtainControl
+from .control import _CoverControl
 from .device import Device
 from ..helpers.enums import *
 from ..helpers.generics import Generics
