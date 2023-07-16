@@ -9,7 +9,7 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.cover import CoverEntity, CoverDeviceClass, PLATFORM_SCHEMA
+from homeassistant.components.cover import CoverEntity, CoverEntityFeature, CoverDeviceClass, PLATFORM_SCHEMA
 from homeassistant.components.cover.const import (
     SUPPORT_OPEN,
     SUPPORT_CLOSE,
