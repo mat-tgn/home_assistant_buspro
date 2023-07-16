@@ -39,7 +39,7 @@ class _Control:
             operate_code = OperateCode.UniversalSwitchControl
             payload = [control.switch_number, control.switch_status.value]
 
-        elif type(control) == _CurtainControl:
+        elif type(control) == _CoverControl:
             operate_code = OperateCode.CurtainSwitchControl
             payload = [control.switch_number, control.switch_status.value]
 
@@ -109,7 +109,7 @@ class _SingleChannelControl(_Control):
 
 
 
-class _CurtainControl(_Control):
+class _CoverControl(_Control):
     def __init__(self, buspro):
         super().__init__(buspro)
 

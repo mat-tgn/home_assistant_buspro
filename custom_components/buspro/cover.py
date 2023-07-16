@@ -1,5 +1,5 @@
 """
-This component provides curtain support for Buspro.
+This component provides cover support for Buspro.
 
 For more details about this platform, please refer to the documentation at
 https://home-assistant.io/components/...
@@ -28,9 +28,9 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 # noinspection PyUnusedLocal
 async def async_setup_platform(hass, config, async_add_entites, discovery_info=None):
-    """Set up Buspro curtain devices."""
+    """Set up Buspro cover devices."""
     # noinspection PyUnresolvedReferences
-    from .pybuspro.devices import Curtain
+    from .pybuspro.devices import Cover
 
     hdl = hass.data[DATA_BUSPRO].hdl
     devices = []
@@ -41,18 +41,18 @@ async def async_setup_platform(hass, config, async_add_entites, discovery_info=N
         address2 = address.split('.')
         device_address = (int(address2[0]), int(address2[1]))
         channel_number = int(address2[2])
-        _LOGGER.debug("Adding curtain '{}' with address {} and channel number {}".format(name, device_address,
+        _LOGGER.debug("Adding cover '{}' with address {} and channel number {}".format(name, device_address,
                                                                                         channel_number))
 
-        curtain = Curtain(hdl, device_address, channel_number, name)
+        cover = Cover(hdl, device_address, channel_number, name)
 
-        devices.append(BusproCurtain(hass, curtain))
+        devices.append(BusproCover(hass, cover))
 
     async_add_entites(devices)
 
 
 # noinspection PyAbstractClass
-class BusproCurtain(CoverEntity):
+class BusproCover(CoverEntity):
     """Representation of a Buspro cover."""
 
     def __init__(self, hass, device):

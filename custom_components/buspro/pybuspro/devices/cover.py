@@ -4,7 +4,7 @@ from ..helpers.enums import *
 from ..helpers.generics import Generics
 
 
-class Curtain(Device):
+class Cover(Device):
     def __init__(self, buspro, device_address, channel_number, name="", delay_read_current_state_seconds=0):
         super().__init__(buspro, device_address, name)
         # device_address = (subnet_id, device_id, channel_number)
@@ -30,20 +30,20 @@ class Curtain(Device):
                 self._call_device_updated()
 
     async def set_stop(self):
-        await self._set(CurtainStatus.STOP)
+        await self._set(CoverStatus.STOP)
 
     async def set_open(self):
-        await self._set(CurtainStatus.OPEN)
+        await self._set(CoverStatus.OPEN)
 
     async def set_close(self):
-        await self._set(CurtainStatus.CLOSE)
+        await self._set(CoverStatus.CLOSE)
 
     async def read_status(self):
         raise NotImplementedError
 
     @property
     def is_closed(self):
-        if self._status == CurtainStatus.CLOSE:
+        if self._status == CoverStatus.CLOSE:
             return True
         else:
             return False
@@ -55,7 +55,7 @@ class Curtain(Device):
     async def _set(self, status):
         self._status = status
 
-        scc = _CurtainControl(self._buspro)
+        scc = _CoverControl(self._buspro)
         scc.subnet_id, scc.device_id = self._device_address
         scc.channel_number = self._channel
         scc.channel_status = status

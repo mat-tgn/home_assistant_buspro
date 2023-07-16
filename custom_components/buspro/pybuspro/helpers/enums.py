@@ -44,7 +44,7 @@ class OnOffStatus(Enum):
     OFF = 0
     ON = 1
 
-class CurtainStatus(Enum):
+class CoverStatus(Enum):
     STOP = 0
     OPEN = 1
     CLOSE = 2
