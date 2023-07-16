@@ -41,7 +41,7 @@ class _Control:
 
         elif type(control) == _CoverControl:
             operate_code = OperateCode.CurtainSwitchControl
-            payload = [control.switch_number, control.switch_status.value]
+            payload = [control.channel_number, control.switch_status.value]
 
         elif type(control) == _ReadStatusOfUniversalSwitch:
             operate_code = OperateCode.ReadStatusOfUniversalSwitch
