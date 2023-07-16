@@ -78,15 +78,6 @@ class BusproCover(CoverEntity):
         return False
 
     @property
-    def setup_features(self):
-        """Return the list of supported features."""
-        self._attr_supported_features = set()
-        self._attr_supported_features.add(CoverEntityFeature.OPEN)
-        self._attr_supported_features.add(CoverEntityFeature.CLOSE)
-        self._attr_supported_features.add(CoverEntityFeature.STOP)
-
-
-    @property
     def name(self):
         """Return the display name of this cover."""
         return self._device.name
@@ -100,6 +91,15 @@ class BusproCover(CoverEntity):
     def is_closed(self):
         """Return true if cover is closed."""
         return self._device.is_closed
+
+
+    def setup_features(self):
+        """Return the list of supported features."""
+        self._attr_supported_features = set()
+        self._attr_supported_features.add(CoverEntityFeature.OPEN)
+        self._attr_supported_features.add(CoverEntityFeature.CLOSE)
+        self._attr_supported_features.add(CoverEntityFeature.STOP)
+
 
     async def async_open_cover(self, **kwargs):
         """Instruct the cover to open."""
