@@ -9,7 +9,12 @@ import logging
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
-from homeassistant.components.cover import CoverEntity, CoverEntityFeature, CoverDeviceClass, PLATFORM_SCHEMA
+from homeassistant.components.cover import CoverEntity, CoverDeviceClass, PLATFORM_SCHEMA
+from homeassistant.components.cover.const import (
+    SUPPORT_OPEN,
+    SUPPORT_CLOSE,
+    SUPPORT_STOP
+)
 from homeassistant.const import (CONF_NAME, CONF_DEVICES)
 from homeassistant.core import callback
 
@@ -59,7 +64,7 @@ class BusproCover(CoverEntity):
         self._hass = hass
         self._device = device
         self._attr_device_class = CoverDeviceClass.CURTAIN
-        self.setup_features()
+        self._attr_supported_features =  CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.STOP 
         self.async_register_callbacks()
 
     @callback
@@ -72,6 +77,13 @@ class BusproCover(CoverEntity):
             await self.async_update_ha_state()
 
         self._device.register_device_updated_cb(after_update_callback)
+
+
+    @property
+    def supported_features(self):
+        """Return the list of supported features."""
+        support = SUPPORT_OPEN | SUPPORT_CLOSE | SUPPORT_STOP
+        return support
 
     @property
     def should_poll(self):
@@ -92,11 +104,6 @@ class BusproCover(CoverEntity):
     def is_closed(self):
         """Return true if cover is closed."""
         return self._device.is_closed
-
-
-    def setup_features(self):
-        """Return the list of supported features."""
-        self._attr_supported_features = ( CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.STOP )
 
 
     async def async_open_cover(self, **kwargs):
